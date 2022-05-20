@@ -1,6 +1,6 @@
 # dnspod ddns
 
-Simple ddnspod ddns
+Simple dnspod ddns tool.
 
 ## resource
 
