@@ -1,7 +1,6 @@
 use std::{collections::HashMap, fmt::Display};
 
 use anyhow::Ok;
-use reqwest;
 
 pub struct DnspodApi {
     client: reqwest::Client,
