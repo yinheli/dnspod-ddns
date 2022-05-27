@@ -6,7 +6,6 @@ edition = "2021"
 keywords = ["dnspod", "ddns"]
 description = "Simple dnspod ddns tool"
 license = "MIT"
-categories = ["network"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
