@@ -3,6 +3,7 @@ name = "dnspod-ddns"
 authors = ["yinheli <me@yinheli.com>"]
 version = "0.1.1"
 edition = "2021"
+description = "Simple dnspod ddns tool"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
