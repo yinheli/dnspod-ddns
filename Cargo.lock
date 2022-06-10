@@ -124,7 +124,7 @@ dependencies = [
 
 [[package]]
 name = "dnspod-ddns"
-version = "0.1.2"
+version = "0.1.3"
 dependencies = [
  "anyhow",
  "chrono",
