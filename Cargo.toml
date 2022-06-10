@@ -21,6 +21,7 @@ serde_json = "1"
 tokio = { version = "1.19", features = ["full"] }
 log = "0.4"
 env_logger = "0.9.0"
+chrono = "0.4"
 
 [[bin]]
 name = "dnspod-ddns"

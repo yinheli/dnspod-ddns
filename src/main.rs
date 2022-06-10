@@ -1,7 +1,9 @@
 use crate::dnspod_api::{DnspodApi, Record};
 
+use chrono::Local;
 use clap::Parser;
 use log::{error, info, trace, warn};
+use std::io::Write;
 use tokio::{
     io::AsyncReadExt,
     time::{self, Duration},
@@ -30,6 +32,15 @@ async fn main() {
     }
 
     env_logger::Builder::new()
+        .format(|buf, record| {
+            writeln!(
+                buf,
+                "{} {} {}",
+                Local::now().format("%Y-%m-%dT%H:%M:%S%.3f"),
+                record.level(),
+                record.args()
+            )
+        })
         .filter_module("dnspod_ddns", level)
         .init();
 
