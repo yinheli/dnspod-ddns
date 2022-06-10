@@ -1,0 +1,13 @@
+[Unit]
+Description=dnspod ddns for example
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=10
+Environment="DNSPOD_API_KEY=xxxx"
+ExecStart=/usr/bin/dnspod-ddns --domain example.com --sub-domain ddns
+KillMode=mixed
+
+[Install]
+WantedBy=multi-user.target
