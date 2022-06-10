@@ -21,7 +21,7 @@ async fn get_ip() -> String {
     buf.trim().to_string()
 }
 
-#[tokio::main]
+#[tokio::main(flavor = "current_thread")]
 async fn main() {
     let args = args::Args::parse();
 
