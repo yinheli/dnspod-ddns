@@ -20,7 +20,7 @@ pub struct Args {
     /// default: 10
     /// min: 5
     /// max: 3600
-    #[clap(short, long, env = "DNSPOD_INTERVAL", default_value = "10")]
+    #[clap(short, long, env = "DNSPOD_INTERVAL", default_value = "10", value_parser = clap::value_parser!(u64).range(5..=3600))]
     pub interval: u64,
 
     /// verbose log
