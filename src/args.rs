@@ -4,7 +4,7 @@ use clap::Parser;
 #[derive(Parser)]
 #[clap(author, version, about)]
 pub struct Args {
-    /// domain, eg: home.example.com
+    /// domain, eg: example.com
     #[clap(short, long)]
     pub domain: String,
 
