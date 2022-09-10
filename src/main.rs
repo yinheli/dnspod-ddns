@@ -1,24 +1,22 @@
 use crate::dnspod_api::{DnspodApi, Record};
 
+use anyhow::Error;
 use chrono::Local;
 use clap::Parser;
 use log::{error, info, trace, warn};
 use std::io::Write;
-use tokio::{
-    io::AsyncReadExt,
-    time::{self, Duration},
-};
+use tokio::time::{self, Duration};
 
 mod args;
 mod dnspod_api;
 
-async fn get_ip() -> String {
-    let mut tcp = tokio::net::TcpStream::connect("ns1.dnspod.net:6666")
-        .await
-        .unwrap();
-    let mut buf = String::new();
-    tcp.read_to_string(&mut buf).await.unwrap();
-    buf.trim().to_string()
+async fn get_ip() -> Result<String, Error> {
+    let result = reqwest::get("http://ns1.dnspod.net:6666")
+        .await?
+        .text()
+        .await?;
+
+    Ok(result.trim().to_owned())
 }
 
 #[tokio::main(flavor = "current_thread")]
@@ -69,23 +67,44 @@ async fn main() {
 
     loop {
         interval.tick().await;
+
         let my_ip = get_ip().await;
-        if my_ip != record_value {
-            info!("update record, {}", my_ip);
-            let result = api
-                .update_record(&args.sub_domain, &record_id, &my_ip)
-                .await;
-            match result {
-                Ok(_) => {
-                    info!("update record success");
-                    record_value = my_ip;
-                }
-                Err(e) => {
-                    warn!("update record failed, {}", e);
+
+        match my_ip {
+            Ok(my_ip) => {
+                if my_ip != record_value {
+                    info!("update record, {}", my_ip);
+                    let result = api
+                        .update_record(&args.sub_domain, &record_id, &my_ip)
+                        .await;
+                    match result {
+                        Ok(_) => {
+                            info!("update record success");
+                            record_value = my_ip;
+                        }
+                        Err(e) => {
+                            warn!("update record failed, {}", e);
+                        }
+                    }
+                } else {
+                    trace!("ip not changed");
                 }
             }
-        } else {
-            trace!("ip not changed");
+            Err(e) => {
+                warn!("get my ip: {:?}", e);
+            }
         }
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use crate::get_ip;
+
+    #[tokio::test]
+    async fn test_get_ip() {
+        let ip = get_ip().await;
+        assert!(ip.is_ok());
+        println!("ip: {:?}", ip.unwrap());
     }
 }
