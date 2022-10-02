@@ -1,7 +1,7 @@
 [package]
 name = "dnspod-ddns"
 authors = ["yinheli <me@yinheli.com>"]
-version = "0.1.10"
+version = "0.1.11"
 edition = "2021"
 keywords = ["dnspod", "ddns"]
 description = "Simple dnspod ddns tool"
