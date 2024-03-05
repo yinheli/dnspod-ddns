@@ -1,11 +1,11 @@
+use std::env;
+
 use crate::dnspod_api::{DnspodApi, Record};
 
 use anyhow::Error;
-use chrono::Local;
 use clap::Parser;
-use log::{error, info, trace, warn};
-use std::io::Write;
 use tokio::time::{self, Duration};
+use tracing::{error, info, trace, warn};
 
 mod args;
 mod dnspod_api;
@@ -21,26 +21,12 @@ async fn get_ip() -> Result<String, Error> {
 
 #[tokio::main(flavor = "current_thread")]
 async fn main() {
-    let args = args::Args::parse();
-
-    let mut level = log::LevelFilter::Info;
-
-    if args.verbose {
-        level = log::LevelFilter::Trace;
+    if env::var("RUST_LOG").is_err() {
+        env::set_var("RUST_LOG", "error,dnspod_ddns=debug");
     }
+    let _ = tracing_subscriber::fmt::init();
 
-    env_logger::Builder::new()
-        .format(|buf, record| {
-            writeln!(
-                buf,
-                "{} {} {}",
-                Local::now().format("%Y-%m-%dT%H:%M:%S%.3f"),
-                record.level(),
-                record.args()
-            )
-        })
-        .filter_module("dnspod_ddns", level)
-        .init();
+    let args = args::Args::parse();
 
     let api = DnspodApi::new(args.token, args.domain);
 
