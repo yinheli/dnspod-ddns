@@ -24,7 +24,7 @@ async fn main() {
     if env::var("RUST_LOG").is_err() {
         env::set_var("RUST_LOG", "error,dnspod_ddns=debug");
     }
-    let _ = tracing_subscriber::fmt::init();
+    tracing_subscriber::fmt::init();
 
     let args = args::Args::parse();
 
